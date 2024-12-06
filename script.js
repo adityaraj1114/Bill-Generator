@@ -1,5 +1,3 @@
-// script.js
-// Generate Bill Button Logic
 // Generate Bill Button Logic
 document.getElementById('generateBillBtn').addEventListener('click', () => {
     const customerName = document.getElementById('customerName').value.trim();
@@ -111,7 +109,7 @@ document.getElementById('generateBillBtn').addEventListener('click', () => {
     shareOptions.setAttribute('data-bill', JSON.stringify(billDetails));
 });
 
-// WhatsApp Share Button Logic
+// WhatsApp Share Button Logic - Send Bill as Text
 document.getElementById('sendWhatsAppBtn').addEventListener('click', () => {
     const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
     const shareOptions = document.getElementById('shareOptions');
@@ -130,17 +128,17 @@ document.getElementById('sendWhatsAppBtn').addEventListener('click', () => {
 
     // Construct WhatsApp message
     const whatsappMessage = `
-        *Piyo Mithila Invoice*%0A
-        Date: ${billDetails.date}%0A
-        Time: ${billDetails.time}%0A%0A
-        *Customer Name:* ${billDetails.customerName}%0A
-        *Product:* ${billDetails.product}%0A
-        *Quantity:* ${billDetails.quantity}%0A
-        *Rate:* ₹${billDetails.price}%0A
-        *Subtotal:* ₹${billDetails.subtotal}%0A
-        *Discount:* ₹${billDetails.discount}%0A
-        *Total Amount:* ₹${billDetails.total}%0A%0A
-        Thank you for your purchase!%0A
+        *Piyo Mithila Invoice*
+        Date: ${billDetails.date}
+        Time: ${billDetails.time}
+        *Customer Name:* ${billDetails.customerName}
+        *Product:* ${billDetails.product}
+        *Quantity:* ${billDetails.quantity}
+        *Rate:* ₹${billDetails.price}
+        *Subtotal:* ₹${billDetails.subtotal}
+        *Discount:* ₹${billDetails.discount}
+        *Total Amount:* ₹${billDetails.total}
+        Thank you for your purchase!
     `.trim();
 
     const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
@@ -149,55 +147,71 @@ document.getElementById('sendWhatsAppBtn').addEventListener('click', () => {
     window.open(whatsappLink, '_blank');
 });
 
-
-
-// // -------------------------------------
-
-// function sendWhatsAppMessage() {
-//     const number = document.getElementById("whatsappNumber").value.trim();
-//     const message = "Check out this portfolio: https://adityaraj1114resume.netlify.app/";
-
-//     // Format the number, remove any spaces or dashes
-//     const formattedNumber = number.replace(/[^0-9]/g, "");
-
-//     if (formattedNumber) {
-//         const url = `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
-//         window.open(url, '_blank');
-//     } else {
-//         alert("Please enter a valid WhatsApp number.");
-//     }
-// }
-
-// Include jsPDF script (Add this in your HTML file)
-// <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-
-document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
-    const { jsPDF } = window.jspdf; // Access jsPDF
+// Share Bill Button Logic (Share as Image)
+document.getElementById('shareBillBtn').addEventListener('click', async () => {
     const billOutput = document.getElementById('billOutput');
 
-    // Check if the billOutput contains content
     if (!billOutput.innerHTML.trim()) {
         alert('No bill found. Please generate the bill first.');
         return;
     }
 
     try {
-        // Initialize jsPDF
-        const pdf = new jsPDF();
+        // Convert the bill to an image using html2canvas
+        const canvas = await html2canvas(billOutput);
+        const image = canvas.toDataURL('image/png'); // Get image as base64
 
-        // Add content from billOutput to the PDF
+        // Convert the base64 image to Blob
+        const blob = await (await fetch(image)).blob();
+        const file = new File([blob], 'Bill.png', { type: 'image/png' });
+
+        // Use the navigator.share API for sharing
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                title: 'Piyo Mithila Invoice',
+                text: 'Here is your bill:',
+                files: [file],
+            });
+        } else {
+            // Fallback: Download the image if sharing is not supported
+            const link = document.createElement('a');
+            link.href = image;
+            link.download = 'Bill.png';
+            link.click();
+        }
+    } catch (error) {
+        console.error('Error generating or sharing image:', error);
+        alert('Failed to share the bill image. Please try again.');
+    }
+});
+
+// Download PDF Button Logic
+document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
+    const { jsPDF } = window.jspdf;
+    const billOutput = document.getElementById('billOutput');
+
+    if (!billOutput.innerHTML.trim()) {
+        alert('No bill found. Please generate the bill first.');
+        return;
+    }
+
+    try {
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'px',
+            format: 'a4', // Use A4 page size
+        });
+
         await pdf.html(billOutput, {
             callback: (doc) => {
-                // Save the PDF with a dynamic filename
                 doc.save(`Bill_${new Date().toISOString().slice(0, 10)}.pdf`);
             },
             x: 10,
             y: 10,
-            width: 190, // Adjust the width to fit content
+            margin: [10, 10, 10, 10], // Margins: top, right, bottom, left
         });
     } catch (error) {
         console.error('Error generating PDF:', error);
         alert('Failed to generate the PDF. Please try again.');
     }
 });
-
