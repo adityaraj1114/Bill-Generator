@@ -63,7 +63,7 @@ document.getElementById('generateBillBtn').addEventListener('click', () => {
                     <p>Time: ${time}</p>
                 </div>
             </div>
-            <div>
+            <div class="bill-bg">
                 <p><strong>Bill To:</strong> ${customerName}</p>
             </div>
             <div class="bill-details">

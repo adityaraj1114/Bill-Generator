@@ -77,7 +77,8 @@ button:hover {
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-top: 10px;
-    font-size: 4vw;
+    font-size: 2vw;
+    line-height: 5px;
 }
 
 .bill {
@@ -85,6 +86,14 @@ button:hover {
     padding: 15px;
     background: #fff;
     border-radius: 4px;
+    min-height: 400px;
+    /* height: 400px; */
+}
+
+.bill-bg {
+    /* background-color: lightgrey; */
+    background-color: #f1f1f1;
+    padding: 0.1vw;
 }
 
 .bill-header,
@@ -103,7 +112,7 @@ button:hover {
 }
 
 .bill-details p {
-    margin: 5px 0;
+    /* margin: 5px 0; */
 }
 
 .bill-totals {
