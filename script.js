@@ -22,6 +22,12 @@ document.getElementById('generateBillBtn').addEventListener('click', () => {
     // Product prices
     const prices = {
         "Kulhar": 1.75,
+        "Kulhar": 1.70,
+        "Kulhar": 1.65,
+        "Kulhar": 1.60,
+        "Kulhar": 1.55,
+        "Kulhar": 1.50,
+        "Kulhar": 1.45,
         "Water Bottle": 10,
     };
 
