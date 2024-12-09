@@ -115,43 +115,43 @@ document.getElementById('generateBillBtn').addEventListener('click', () => {
     shareOptions.setAttribute('data-bill', JSON.stringify(billDetails));
 });
 
-// WhatsApp Share Button Logic - Send Bill as Text
-document.getElementById('sendWhatsAppBtn').addEventListener('click', () => {
-    const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
-    const shareOptions = document.getElementById('shareOptions');
-    const billDetails = JSON.parse(shareOptions.getAttribute('data-bill'));
+// // WhatsApp Share Button Logic - Send Bill as Text
+// document.getElementById('sendWhatsAppBtn').addEventListener('click', () => {
+//     const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
+//     const shareOptions = document.getElementById('shareOptions');
+//     const billDetails = JSON.parse(shareOptions.getAttribute('data-bill'));
 
-    if (!billDetails) {
-        alert('No bill details available. Please generate the bill first.');
-        return;
-    }
+//     if (!billDetails) {
+//         alert('No bill details available. Please generate the bill first.');
+//         return;
+//     }
 
-    // Validate WhatsApp number
-    if (!/^\d{10,15}$/.test(whatsappNumber)) {
-        alert('Please enter a valid WhatsApp number.');
-        return;
-    }
+//     // Validate WhatsApp number
+//     if (!/^\d{10,15}$/.test(whatsappNumber)) {
+//         alert('Please enter a valid WhatsApp number.');
+//         return;
+//     }
 
-    // Construct WhatsApp message
-    const whatsappMessage = `
-        *Piyo Mithila Invoice*
-        Date: ${billDetails.date}
-        Time: ${billDetails.time}
-        *Customer Name:* ${billDetails.customerName}
-        *Product:* ${billDetails.product}
-        *Quantity:* ${billDetails.quantity}
-        *Rate:* ₹${billDetails.price}
-        *Subtotal:* ₹${billDetails.subtotal}
-        *Discount:* ₹${billDetails.discount}
-        *Total Amount:* ₹${billDetails.total}
-        Thank you for your purchase!
-    `.trim();
+//     // Construct WhatsApp message
+//     const whatsappMessage = `
+//         *Piyo Mithila Invoice*
+//         Date: ${billDetails.date}
+//         Time: ${billDetails.time}
+//         *Customer Name:* ${billDetails.customerName}
+//         *Product:* ${billDetails.product}
+//         *Quantity:* ${billDetails.quantity}
+//         *Rate:* ₹${billDetails.price}
+//         *Subtotal:* ₹${billDetails.subtotal}
+//         *Discount:* ₹${billDetails.discount}
+//         *Total Amount:* ₹${billDetails.total}
+//         Thank you for your purchase!
+//     `.trim();
 
-    const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+//     const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
-    // Open WhatsApp link
-    window.open(whatsappLink, '_blank');
-});
+//     // Open WhatsApp link
+//     window.open(whatsappLink, '_blank');
+// });
 
 // Share Bill Button Logic (Share as Image)
 document.getElementById('shareBillBtn').addEventListener('click', async () => {
